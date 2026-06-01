@@ -1,0 +1,162 @@
+.btn-voltar-login {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #1a6ec8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.3px;
+}
+
+.btn-voltar-login:hover {
+  text-decoration: underline;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  background: #fff;
+  border: 2px solid #1a6ec8;
+  padding: 28px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: relative;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a6ec8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.dashboard-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a6ec8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-range span {
+  font-size: 13px;
+  color: #555;
+}
+
+.date-range input,
+.dashboard-filters select {
+  padding: 6px 10px;
+  border: 1.5px solid #1a6ec8;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn-settings {
+  padding: 6px 10px;
+  background: none;
+  border: 1.5px solid #1a6ec8;
+  border-radius: 6px;
+  font-size: 18px;
+  color: #1a6ec8;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-settings:hover {
+  background: #eef4fc;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.chart-card {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.chart-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a6ec8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+}
+
+.faturamento-card {
+  border: 2px solid #1a6ec8;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+.faturamento-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin: 0;
+}
+
+.faturamento-valor {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a6ec8;
+  margin: 0;
+}
+
+.placeholder-card {
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  height: 180px;
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), #d1d5db calc(50% - 0.5px), #d1d5db calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
