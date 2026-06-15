@@ -1,16 +1,51 @@
-# React + Vite
+# Panorama Exames — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SPA do projeto **Panorama Exames**, desenvolvida com React + Vite. Para uma visão geral do projeto (e como rodar tudo com Docker Compose), veja o [README na raiz do repositório](../README.md).
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Node.js](https://nodejs.org/) 20+
+- npm
 
-## React Compiler
+## Configuração e execução (modo desenvolvimento)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Instale as dependências:
 
-## Expanding the ESLint configuration
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. Rode o servidor de desenvolvimento:
+
+   ```bash
+   npm run dev
+   ```
+
+A aplicação ficará disponível em `http://localhost:5173`.
+
+## Configuração da API
+
+A URL base da API está definida em [`src/services/api.js`](src/services/api.js):
+
+```js
+const api = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  withCredentials: true,
+})
+```
+
+Para que o frontend funcione corretamente, o backend precisa estar rodando em `http://localhost:8000` (instruções em [`../backend/README.md`](../backend/README.md)). O CORS do backend já está configurado para aceitar requisições de `http://localhost:5173`.
+
+## Build de produção
+
+```bash
+npm run build
+```
+
+Os arquivos gerados ficam em `dist/` e são servidos via Nginx (ver `Dockerfile` e `nginx.conf`), que faz proxy das rotas `/api` para o backend.
+
+## Lint
+
+```bash
+npm run lint
+```
