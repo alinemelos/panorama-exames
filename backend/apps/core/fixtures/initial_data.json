@@ -1,0 +1,42 @@
+[
+  {
+    "model": "core.problem",
+    "pk": 1,
+    "fields": { "name": "Equipamento em manutenção" }
+  },
+  {
+    "model": "core.problem",
+    "pk": 2,
+    "fields": { "name": "Problema de infraestrutura" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 1,
+    "fields": { "name": "Tomografia", "cost": "350.00" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 2,
+    "fields": { "name": "Raio X", "cost": "120.00" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 3,
+    "fields": { "name": "Ultrasonografia", "cost": "200.00" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 4,
+    "fields": { "name": "Ressonância", "cost": "800.00" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 5,
+    "fields": { "name": "Mamografia", "cost": "180.00" }
+  },
+  {
+    "model": "core.exam",
+    "pk": 6,
+    "fields": { "name": "Densitometria", "cost": "150.00" }
+  }
+]
