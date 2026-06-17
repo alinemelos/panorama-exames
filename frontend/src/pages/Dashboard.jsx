@@ -10,6 +10,8 @@ import { getDashboard } from '../services/dashboard'
 import { listMachines } from '../services/machines'
 import api from '../services/api'
 
+const CORES_PROBLEMAS = ['#1a6ec8', '#93c5fd', '#1e40af', '#bfdbfe']
+
 function Dashboard() {
   const navigate = useNavigate()
   const [dataInicio, setDataInicio] = useState('2026-01-01')
@@ -20,6 +22,7 @@ function Dashboard() {
   const [machines, setMachines] = useState([])
   const [examePorMes, setExamePorMes] = useState([])
   const [problemasPorMes, setProblemasPorMes] = useState([])
+  const [problemasTipos, setProblemasTipos] = useState([])
   const [faturamento, setFaturamento] = useState(0)
 
   useEffect(() => {
@@ -35,6 +38,19 @@ function Dashboard() {
   }, [])
 
   useEffect(() => {
+    if (machineId && examId) {
+      const stillValid = machines.some(
+        m => String(m.id) === machineId && m.exam_type === Number(examId)
+      )
+      if (!stillValid) setMachineId('')
+    }
+  }, [examId, machines])
+
+  const filteredMachines = examId
+    ? machines.filter(m => m.exam_type === Number(examId))
+    : machines
+
+  useEffect(() => {
     async function loadDashboard() {
       const params = { date_from: dataInicio, date_to: dataFim }
       if (examId) params.exam_id = examId
@@ -43,6 +59,7 @@ function Dashboard() {
         const { data } = await getDashboard(params)
         setExamePorMes(data.exames_por_mes)
         setProblemasPorMes(data.problemas_por_mes)
+        setProblemasTipos(data.problemas_tipos)
         setFaturamento(data.faturamento)
       } catch {
         // usuário pode não ter permissão se não for admin
@@ -87,7 +104,7 @@ function Dashboard() {
             <span className="filter-label">Equipamento</span>
             <select value={machineId} onChange={(e) => setMachineId(e.target.value)}>
               <option value="">-TODOS-</option>
-              {machines.map(m => <option key={m.id} value={m.id}>{m.exam_type_name} #{m.id}</option>)}
+              {filteredMachines.map(m => <option key={m.id} value={m.id}>{m.exam_type_name} #{m.id}</option>)}
             </select>
           </div>
 
@@ -124,17 +141,17 @@ function Dashboard() {
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
               <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="manutencao" name="Equipamento em manutenção" fill="#1a6ec8" />
-              <Bar dataKey="infraestrutura" name="Problema de infraestrutura" fill="#93c5fd" />
+              {problemasTipos.map((tipo, i) => (
+                <Bar
+                  key={tipo.slug}
+                  dataKey={tipo.slug}
+                  name={tipo.name}
+                  fill={CORES_PROBLEMAS[i % CORES_PROBLEMAS.length]}
+                />
+              ))}
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
-
-      <div className="dashboard-grid dashboard-grid-bottom">
-        <div className="placeholder-card" />
-        <div className="placeholder-card" />
-        <div className="placeholder-card" />
       </div>
     </div>
   )

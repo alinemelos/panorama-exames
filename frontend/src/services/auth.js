@@ -6,6 +6,9 @@ export const login = (email, password) =>
 export const logout = () =>
   api.post('/auth/logout/')
 
+export const refreshToken = () =>
+  api.post('/auth/refresh/')
+
 export const requestAccess = (email, name) =>
   api.post('/auth/request-access/', { email, name, role: 'nursing' })
 
