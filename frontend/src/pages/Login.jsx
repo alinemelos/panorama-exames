@@ -15,6 +15,7 @@ function Login() {
     setLoading(true)
     try {
       const { data } = await login(email, senha)
+      localStorage.setItem('user', JSON.stringify({ role: data.role, name: data.name }))
       if (data.role === 'nursing') {
         navigate('/plantao')
       } else {
