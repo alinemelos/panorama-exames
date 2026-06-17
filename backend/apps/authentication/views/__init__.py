@@ -3,6 +3,7 @@ from .request_access import RequestAccessView
 from .request_reset import RequestResetView
 from .access_requests import AccessRequestListView, AccessRequestApproveView, AccessRequestRejectView
 from .reset_requests import ResetRequestListView, ResetRequestApproveView, ResetRequestRejectView
+from .users import UserListView
 
 __all__ = [
     'LoginView',
@@ -15,4 +16,5 @@ __all__ = [
     'ResetRequestListView',
     'ResetRequestApproveView',
     'ResetRequestRejectView',
+    'UserListView',
 ]

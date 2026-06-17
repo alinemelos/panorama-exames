@@ -14,4 +14,6 @@ urlpatterns = [
     path('reset-requests/', views.ResetRequestListView.as_view(), name='auth-reset-requests'),
     path('reset-requests/<int:pk>/approve/', views.ResetRequestApproveView.as_view(), name='auth-reset-request-approve'),
     path('reset-requests/<int:pk>/reject/', views.ResetRequestRejectView.as_view(), name='auth-reset-request-reject'),
+
+    path('users/', views.UserListView.as_view(), name='auth-users'),
 ]

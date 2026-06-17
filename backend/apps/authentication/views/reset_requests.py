@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,6 +7,14 @@ from apps.authentication.models import CustomUser
 from apps.authentication.serializers import ResetRequestSerializer, AdminSetPasswordSerializer
 
 
+@extend_schema_view(
+    get=extend_schema(
+        tags=['Autenticação'],
+        summary='Listar solicitações de redefinição de senha pendentes',
+        description='Retorna os usuários ativos que solicitaram redefinição de senha e aguardam aprovação de um administrador.',
+        responses=ResetRequestSerializer,
+    )
+)
 class ResetRequestListView(generics.ListAPIView):
     serializer_class = ResetRequestSerializer
     permission_classes = [IsAdmin]
