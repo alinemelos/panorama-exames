@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -34,7 +34,25 @@ class DutyCurrentView(APIView):
     permission_classes = [AllowAny]
     serializer_class = DutySerializer
 
-    @extend_schema(tags=['Plantões'])
+    @extend_schema(
+        tags=['Plantões'],
+        summary='Buscar plantão aberto da máquina',
+        description='Retorna o plantão em aberto (sem end_date) para a máquina informada via query param machine_id.',
+        parameters=[
+            OpenApiParameter(
+                name='machine_id',
+                type=int,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description='ID da máquina para buscar o plantão aberto.',
+            ),
+        ],
+        responses={
+            200: DutySerializer,
+            400: OpenApiResponse(description='machine_id não informado.'),
+            404: OpenApiResponse(description='Nenhum plantão aberto para a máquina.'),
+        },
+    )
     def get(self, request):
         machine_id = request.query_params.get('machine_id')
         if not machine_id:
