@@ -7,6 +7,7 @@ urlpatterns = [
     path('machines/', views.MachineListCreateView.as_view(), name='machine-list'),
     path('machines/<int:pk>/', views.MachineDetailView.as_view(), name='machine-detail'),
     path('problems/', views.ProblemListCreateView.as_view(), name='problem-list'),
+    path('problems/<int:pk>/', views.ProblemDetailView.as_view(), name='problem-detail'),
     path('duties/', views.DutyCreateView.as_view(), name='duty-create'),
     path('duties/current/', views.DutyCurrentView.as_view(), name='duty-current'),
     path('duties/<int:pk>/collections/', views.DutyAddCollectionView.as_view(), name='duty-add-collection'),

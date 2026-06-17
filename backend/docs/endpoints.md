@@ -75,7 +75,8 @@ Máquinas/equipamentos usados para realizar exames, vinculadas a um tipo de exam
 
 | Método | Path | Permissão | Descrição |
 |---|---|---|---|
-| GET | `problems/` | IsAuthenticated | Lista os motivos pré-cadastrados usados ao encerrar um plantão sem coletas. |
+| GET, POST | `problems/` | IsAuthenticated | Lista os motivos pré-cadastrados usados ao encerrar um plantão sem coletas, ou cria um novo (`name`). |
+| GET, PUT, PATCH, DELETE | `problems/<pk>/` | IsAuthenticated | Detalha, atualiza ou remove um motivo específico. |
 
 ### Plantões (duties)
 

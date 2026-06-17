@@ -1,6 +1,6 @@
 from .exam import ExamListCreateView, ExamDetailView
 from .machine import MachineListCreateView, MachineDetailView
-from .problem import ProblemListView
+from .problem import ProblemListCreateView, ProblemDetailView
 from .duty import DutyCreateView, DutyCurrentView, DutyAddCollectionView, DutyCloseView
 from .dashboard import DashboardView
 
@@ -9,7 +9,8 @@ __all__ = [
     'ExamDetailView',
     'MachineListCreateView',
     'MachineDetailView',
-    'ProblemListView',
+    'ProblemListCreateView',
+    'ProblemDetailView',
     'DutyCreateView',
     'DutyCurrentView',
     'DutyAddCollectionView',
