@@ -1,4 +1,3 @@
-import uuid
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +12,6 @@ class RequestResetView(APIView):
         serializer = RequestResetSerializer(data=request.data, context={})
         serializer.is_valid(raise_exception=True)
         user = serializer.context['user']
-        user.activation_token = uuid.uuid4()
+        user.password_reset_requested = True
         user.save()
-        # TODO: send reset email with token
-        return Response({'detail': 'Password reset link sent to your email.'})
+        return Response({'detail': 'Password reset request submitted. An administrator will review and approve it.'})

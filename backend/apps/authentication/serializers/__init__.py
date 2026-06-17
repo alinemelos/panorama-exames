@@ -1,13 +1,15 @@
 from .login import LoginSerializer
 from .request_access import RequestAccessSerializer
-from .set_password import SetPasswordSerializer
-from .reset_password import ResetPasswordSerializer
 from .request_reset import RequestResetSerializer
+from .access_request import AccessRequestSerializer
+from .reset_request import ResetRequestSerializer
+from .admin_set_password import AdminSetPasswordSerializer
 
 __all__ = [
     'LoginSerializer',
     'RequestAccessSerializer',
-    'SetPasswordSerializer',
-    'ResetPasswordSerializer',
     'RequestResetSerializer',
+    'AccessRequestSerializer',
+    'ResetRequestSerializer',
+    'AdminSetPasswordSerializer',
 ]

@@ -1,4 +1,3 @@
-import uuid
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,9 +12,8 @@ class RequestAccessView(APIView):
     def post(self, request):
         serializer = RequestAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(activation_token=uuid.uuid4(), is_active=False)
-        # TODO: send activation email with token
+        serializer.save(is_active=False)
         return Response(
-            {'detail': 'Access request submitted. The user will receive an activation link.'},
+            {'detail': 'Access request submitted. An administrator will review and approve it.'},
             status=status.HTTP_201_CREATED,
         )

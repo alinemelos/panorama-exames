@@ -1,4 +1,3 @@
-import uuid
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from apps.authentication.managers import CustomUserManager
@@ -14,7 +13,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.NURSING)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    activation_token = models.UUIDField(null=True, blank=True, default=None)
+    password_reset_requested = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()

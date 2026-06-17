@@ -5,7 +5,7 @@ from apps.authentication.models import CustomUser
 class RequestAccessSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['email', 'name', 'role']
+        fields = ['email', 'name']
 
     def validate_email(self, value):
         if CustomUser.objects.filter(email=value).exists():
