@@ -82,14 +82,15 @@ Máquinas/equipamentos usados para realizar exames, vinculadas a um tipo de exam
 
 ### Plantões (duties)
 
-Representa o turno de trabalho de um enfermeiro em uma máquina, com registro de coletas realizadas.
+Representa o turno de trabalho em uma máquina (não vinculado a um usuário autenticado), com registro de coletas realizadas.
 
 | Método | Path | Permissão | Descrição |
 |---|---|---|---|
-| POST | `duties/` | IsAuthenticated | Abre um novo plantão para o usuário autenticado em uma máquina (`machine`). |
-| GET | `duties/current/` | IsAuthenticated | Retorna o plantão em aberto do usuário autenticado, se houver. |
-| POST | `duties/<pk>/collections/` | IsAuthenticated | Registra uma coleta (contagem de exames) dentro do plantão. |
-| PATCH | `duties/<pk>/close/` | IsAuthenticated | Encerra o plantão; se nenhuma coleta foi registrada, é obrigatório informar um `problem`. |
+| POST | `duties/` | Pública | Abre um novo plantão para a máquina informada (`machine`). Se a máquina já tiver um plantão aberto, retorna 400 com `detail` e `duty_id` do plantão existente. |
+| GET | `duties/current/` | Pública | Retorna o plantão em aberto da máquina informada via query param `machine_id` (obrigatório). 400 se `machine_id` não informado, 404 se a máquina não tiver plantão aberto. |
+| GET | `duties/<pk>/` | Pública | Retorna o detalhe de um plantão específico pelo id. |
+| POST | `duties/<pk>/collections/` | Pública | Registra uma coleta (contagem de exames) dentro do plantão. |
+| PATCH | `duties/<pk>/close/` | Pública | Encerra o plantão; se nenhuma coleta foi registrada, é obrigatório informar um `problem`. |
 
 ### Dashboard
 

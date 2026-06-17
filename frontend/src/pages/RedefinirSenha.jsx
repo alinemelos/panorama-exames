@@ -111,7 +111,7 @@ function RedefinirSenha() {
           </div>
 
           {erro && <p className="login-erro">{erro}</p>}
-          {mensagem && <p style={{ color: 'green', fontSize: 14 }}>{mensagem}</p>}
+          {mensagem && <p className="login-sucesso">{mensagem}</p>}
 
           <button type="submit" className="btn-enviar" disabled={loading}>
             {loading ? 'Enviando...' : 'Enviar'}

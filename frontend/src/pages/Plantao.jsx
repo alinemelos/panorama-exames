@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listMachines, listProblems } from '../services/machines'
-import { addCollection, closeDuty, getCurrent, openDuty } from '../services/duties'
+import { addCollection, closeDuty, getCurrent, getDuty, openDuty } from '../services/duties'
+import api from '../services/api'
 import './styles/Plantao.css'
 
 function Plantao() {
   const navigate = useNavigate()
 
   const [machines, setMachines] = useState([])
+  const [exames, setExames] = useState([])
+  const [examId, setExamId] = useState('')
   const [problems, setProblems] = useState([])
   const [duty, setDuty] = useState(null)
+  const [dutyExistente, setDutyExistente] = useState(null)
   const [machineSelecionada, setMachineSelecionada] = useState('')
   const [machineAberta, setMachineAberta] = useState(false)
   const [quantidade, setQuantidade] = useState('')
@@ -22,27 +26,61 @@ function Plantao() {
   const collections = duty?.collections ?? []
   const total = duty?.total_count ?? 0
   const historicoExibido = mostrarTudo ? collections : collections.slice(0, 4)
+  const filteredMachines = examId
+    ? machines.filter(m => m.exam_type === Number(examId))
+    : machines
 
   useEffect(() => {
     async function init() {
       try {
-        const [mRes, pRes] = await Promise.all([listMachines(), listProblems()])
+        const [mRes, pRes, eRes] = await Promise.all([listMachines(), listProblems(), api.get('/core/exams/')])
         setMachines(mRes.data)
         setProblems(pRes.data)
+        setExames(eRes.data)
         if (mRes.data.length > 0) setMachineSelecionada(mRes.data[0].id)
       } catch {
         setErro('Erro ao carregar dados. Verifique sua conexão.')
       }
-
-      try {
-        const { data } = await getCurrent()
-        setDuty(data)
-      } catch {
-        // sem plantão aberto, ok
-      }
     }
     init()
   }, [])
+
+  useEffect(() => {
+    if (machineSelecionada && examId) {
+      const stillValid = machines.some(
+        m => m.id === machineSelecionada && m.exam_type === Number(examId)
+      )
+      if (!stillValid) setMachineSelecionada('')
+    }
+  }, [examId, machines])
+
+  useEffect(() => {
+    if (!machineSelecionada) return
+    async function checkDutyAberto() {
+      try {
+        const { data } = await getCurrent(machineSelecionada)
+        setDutyExistente(data)
+      } catch (err) {
+        if (err.response?.status === 404) {
+          setDutyExistente(null)
+        } else {
+          setErro('Erro ao verificar plantão da máquina.')
+        }
+      }
+    }
+    checkDutyAberto()
+  }, [machineSelecionada])
+
+  useEffect(() => {
+    if (view !== 'concluido') return
+    const timer = setTimeout(() => {
+      setDuty(null)
+      setDutyExistente(null)
+      setMotivo('')
+      setView('plantao')
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [view])
 
   async function handleAbrirPlantao() {
     if (!machineSelecionada) {
@@ -50,12 +88,28 @@ function Plantao() {
       return
     }
     setErro('')
+
+    if (dutyExistente) {
+      setDuty(dutyExistente)
+      return
+    }
+
     setLoading(true)
     try {
       const { data } = await openDuty(machineSelecionada)
       setDuty(data)
     } catch (err) {
-      setErro(err.response?.data?.detail || 'Erro ao abrir plantão.')
+      const dutyId = err.response?.data?.duty_id
+      if (dutyId) {
+        try {
+          const { data } = await getDuty(dutyId)
+          setDuty(data)
+        } catch {
+          setErro(err.response?.data?.detail || 'Erro ao abrir plantão.')
+        }
+      } else {
+        setErro(err.response?.data?.detail || 'Erro ao abrir plantão.')
+      }
     } finally {
       setLoading(false)
     }
@@ -76,7 +130,7 @@ function Plantao() {
     setLoading(true)
     try {
       await addCollection(duty.id, qtd)
-      const { data } = await getCurrent()
+      const { data } = await getDuty(duty.id)
       setDuty(data)
       setQuantidade('')
     } catch (err) {
@@ -122,10 +176,19 @@ function Plantao() {
     return m ? `${m.exam_type_name} #${m.id}` : id
   }
 
+  function handleVoltar() {
+    if (duty) {
+      setDuty(null)
+      setView('plantao')
+    } else {
+      navigate('/')
+    }
+  }
+
   if (view === 'motivo') {
     return (
       <div className="plantao-page">
-        <button className="btn-voltar-login" onClick={() => navigate('/')}>&#8592; Voltar ao login</button>
+        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
         <div className="plantao-content">
           <h1 className="plantao-title">Qual o motivo de ter 0 exames no plantão?</h1>
           <form onSubmit={handleEnviarMotivo} className="motivo-form">
@@ -154,9 +217,9 @@ function Plantao() {
   if (view === 'concluido') {
     return (
       <div className="plantao-page">
-        <button className="btn-voltar-login" onClick={() => navigate('/')}>&#8592; Voltar ao login</button>
+        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
         <div className="plantao-content">
-          <p className="concluido-texto">Envio Concluído</p>
+          <p className="plantao-sucesso">Envio Concluído</p>
         </div>
       </div>
     )
@@ -164,12 +227,21 @@ function Plantao() {
 
   return (
     <div className="plantao-page">
-      <button className="btn-voltar-login" onClick={() => navigate('/')}>&#8592; Voltar ao login</button>
+      <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
 
       {!duty ? (
         <div className="plantao-content">
           <h1 className="plantao-title">Abrir Plantão</h1>
           <div className="plantao-dropdowns">
+            <div className="dropdown-section">
+              <p className="dropdown-label">Exame</p>
+              <select value={examId} onChange={(e) => setExamId(e.target.value)}>
+                <option value="">-TODOS-</option>
+                {exames.map(ex => (
+                  <option key={ex.id} value={ex.id}>{ex.name}</option>
+                ))}
+              </select>
+            </div>
             <div className="dropdown-section">
               <p className="dropdown-label">Equipamento</p>
               <div className="dropdown">
@@ -177,11 +249,11 @@ function Plantao() {
                   className="dropdown-selected"
                   onClick={() => setMachineAberta(!machineAberta)}
                 >
-                  {machineSelecionada ? machineName(machineSelecionada) : 'Selecione...'} <span>{machineAberta ? '∧' : '∨'}</span>
+                  <span className="dropdown-text">{machineSelecionada ? machineName(machineSelecionada) : 'Selecione...'}</span> <span>{machineAberta ? '∧' : '∨'}</span>
                 </button>
                 {machineAberta && (
                   <div className="dropdown-list">
-                    {machines.filter(m => m.id !== machineSelecionada).map(m => (
+                    {filteredMachines.filter(m => m.id !== machineSelecionada).map(m => (
                       <button key={m.id} onClick={() => { setMachineSelecionada(m.id); setMachineAberta(false) }}>
                         {m.exam_type_name} #{m.id}
                       </button>
@@ -193,7 +265,7 @@ function Plantao() {
           </div>
           {erro && <p className="login-erro">{erro}</p>}
           <button className="btn-finalizar" onClick={handleAbrirPlantao} disabled={loading || machines.length === 0}>
-            {loading ? 'Abrindo...' : 'Iniciar Plantão'}
+            {loading ? 'Abrindo...' : dutyExistente ? 'Continuar Plantão' : 'Iniciar Plantão'}
           </button>
         </div>
       ) : (
@@ -203,7 +275,7 @@ function Plantao() {
               <p className="dropdown-label">Equipamento</p>
               <div className="dropdown">
                 <button className="dropdown-selected" disabled>
-                  {duty.machine_name}
+                  <span className="dropdown-text">{duty.machine_name}</span>
                 </button>
               </div>
             </div>

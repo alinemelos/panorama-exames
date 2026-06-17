@@ -1,3 +1,16 @@
+:root {
+  --color-primary: #1a6ec8;
+  --color-primary-hover: #155bad;
+  --color-primary-bg-light: #eef4fc;
+  --color-text-dark: #333;
+  --color-text-muted: #555;
+  --color-text-light: #888;
+  --color-placeholder: #aaa;
+  --color-border-light: #e5e7eb;
+  --color-border-muted: #d1d5db;
+  --color-error: #dc2626;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -5,10 +18,10 @@
 }
 
 body {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Montserrat', system-ui, 'Segoe UI', Roboto, sans-serif;
   background: #fff;
   min-height: 100vh;
-  border: 2px solid #1a6ec8;
+  border: 2px solid var(--color-primary);
 }
 
 .login-wrapper {
@@ -29,9 +42,10 @@ body {
 }
 
 .login-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1a6ec8;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: center;
@@ -53,9 +67,10 @@ body {
 }
 
 .field-group label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a6ec8;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -63,16 +78,17 @@ body {
 .field-group input {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid #1a6ec8;
+  border: 1.5px solid var(--color-primary);
   border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
   font-size: 15px;
-  color: #333;
+  color: var(--color-text-dark);
   outline: none;
   transition: box-shadow 0.2s;
 }
 
 .field-group input::placeholder {
-  color: #aaa;
+  color: var(--color-placeholder);
 }
 
 .field-group input:focus {
@@ -82,7 +98,7 @@ body {
 .forgot-link {
   align-self: center;
   font-size: 14px;
-  color: #1a6ec8;
+  color: var(--color-primary);
   text-decoration: none;
   margin-top: 4px;
 }
@@ -93,22 +109,22 @@ body {
 
 .request-access {
   font-size: 14px;
-  color: #555;
+  color: var(--color-text-muted);
   text-decoration: none;
 }
 
 .request-access:hover {
-  color: #1a6ec8;
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
 .btn-enviar {
   width: 140px;
   padding: 11px;
-  background: #1a6ec8;
+  background: var(--color-primary);
   color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
   letter-spacing: 1px;
   text-transform: uppercase;
   border: none;
@@ -119,22 +135,28 @@ body {
 }
 
 .btn-enviar:hover {
-  background: #155bad;
+  background: var(--color-primary-hover);
 }
 
 .back-link {
   font-size: 13px;
-  color: #888;
+  color: var(--color-text-light);
   text-decoration: none;
 }
 
 .back-link:hover {
-  color: #1a6ec8;
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
 .login-erro {
   font-size: 13px;
-  color: #dc2626;
+  color: var(--color-error);
+  margin: 0;
+}
+
+.login-sucesso {
+  font-size: 13px;
+  color: green;
   margin: 0;
 }
