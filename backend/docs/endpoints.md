@@ -55,11 +55,11 @@ Fluxo de cadastro: novo usuário pede acesso, fica inativo (`is_active=False`) a
 
 ### Exames
 
-Tipos de exame disponíveis (ex.: hemograma, glicemia) e seu custo.
+Tipos de exame disponíveis (ex.: hemograma, glicemia).
 
 | Método | Path | Permissão | Descrição |
 |---|---|---|---|
-| GET, POST | `exams/` | IsAuthenticated | Lista todos os tipos de exame ou cria um novo (`name`, `cost`). |
+| GET, POST | `exams/` | IsAuthenticated | Lista todos os tipos de exame ou cria um novo (`name`). |
 | GET, PUT, PATCH, DELETE | `exams/<pk>/` | IsAuthenticated | Detalha, atualiza ou remove um tipo de exame específico. |
 
 ### Máquinas
