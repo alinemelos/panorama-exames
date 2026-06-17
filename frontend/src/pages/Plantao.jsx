@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { listMachines, listProblems } from '../services/machines'
 import { addCollection, closeDuty, getCurrent, getDuty, openDuty } from '../services/duties'
 import api from '../services/api'
 import './styles/Plantao.css'
 
 function Plantao() {
-  const navigate = useNavigate()
 
   const [machines, setMachines] = useState([])
   const [exames, setExames] = useState([])
@@ -177,18 +175,14 @@ function Plantao() {
   }
 
   function handleVoltar() {
-    if (duty) {
-      setDuty(null)
-      setView('plantao')
-    } else {
-      navigate('/')
-    }
+    setDuty(null)
+    setView('plantao')
   }
 
   if (view === 'motivo') {
     return (
       <div className="plantao-page">
-        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
+        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; Voltar</button>
         <div className="plantao-content">
           <h1 className="plantao-title">Qual o motivo de ter 0 exames no plantão?</h1>
           <form onSubmit={handleEnviarMotivo} className="motivo-form">
@@ -217,7 +211,7 @@ function Plantao() {
   if (view === 'concluido') {
     return (
       <div className="plantao-page">
-        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
+        <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; Voltar</button>
         <div className="plantao-content">
           <p className="plantao-sucesso">Envio Concluído</p>
         </div>
@@ -227,7 +221,7 @@ function Plantao() {
 
   return (
     <div className="plantao-page">
-      <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; {duty ? 'Voltar' : 'Voltar ao login'}</button>
+      {duty && <button className="btn-voltar-login" onClick={handleVoltar}>&#8592; Voltar</button>}
 
       {!duty ? (
         <div className="plantao-content">

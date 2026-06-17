@@ -19,7 +19,6 @@
 .plantao-page {
   min-height: 100vh;
   background: #fff;
-  border: 2px solid var(--color-primary);
   position: relative;
   display: flex;
   align-items: center;

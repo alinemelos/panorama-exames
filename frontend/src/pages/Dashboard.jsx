@@ -2,20 +2,53 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   LineChart, Line, BarChart, Bar,
+  PieChart, Pie, Cell,
   XAxis, YAxis, Tooltip, Legend,
   ReferenceLine, ResponsiveContainer
 } from 'recharts'
+import DatePicker, { registerLocale } from 'react-datepicker'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import 'react-datepicker/dist/react-datepicker.css'
 import './styles/Dashboard.css'
 import { getDashboard } from '../services/dashboard'
 import { listMachines } from '../services/machines'
 import api from '../services/api'
 
+registerLocale('pt-BR', ptBR)
+
 const CORES_PROBLEMAS = ['#1a6ec8', '#93c5fd', '#1e40af', '#bfdbfe']
+const MESES = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
+function anosDisponiveis() {
+  const anoAtual = new Date().getFullYear()
+  const anos = []
+  for (let ano = anoAtual - 5; ano <= anoAtual + 1; ano++) anos.push(ano)
+  return anos
+}
+
+function CalendarioHeader({ date, decreaseMonth, increaseMonth, changeMonth, changeYear }) {
+  return (
+    <div className="datepicker-header">
+      <button type="button" className="datepicker-nav" onClick={decreaseMonth}>&#8249;</button>
+      <select className="datepicker-select-mes" value={date.getMonth()} onChange={(e) => changeMonth(Number(e.target.value))}>
+        {MESES.map((mes, i) => <option key={mes} value={i}>{mes}</option>)}
+      </select>
+      <select className="datepicker-select-ano" value={date.getFullYear()} onChange={(e) => changeYear(Number(e.target.value))}>
+        {anosDisponiveis().map(ano => <option key={ano} value={ano}>{ano}</option>)}
+      </select>
+      <button type="button" className="datepicker-nav" onClick={increaseMonth}>&#8250;</button>
+    </div>
+  )
+}
 
 function Dashboard() {
   const navigate = useNavigate()
-  const [dataInicio, setDataInicio] = useState('2026-01-01')
-  const [dataFim, setDataFim] = useState('2026-12-31')
+  const [dataInicio, setDataInicio] = useState(new Date(2026, 0, 1))
+  const [dataFim, setDataFim] = useState(new Date())
   const [examId, setExamId] = useState('')
   const [machineId, setMachineId] = useState('')
   const [exames, setExames] = useState([])
@@ -24,6 +57,8 @@ function Dashboard() {
   const [problemasPorMes, setProblemasPorMes] = useState([])
   const [problemasTipos, setProblemasTipos] = useState([])
   const [faturamento, setFaturamento] = useState(0)
+  const [totalExames, setTotalExames] = useState(0)
+  const [exemesPorMaquina, setExamesPorMaquina] = useState([])
 
   useEffect(() => {
     async function loadFilters() {
@@ -52,7 +87,7 @@ function Dashboard() {
 
   useEffect(() => {
     async function loadDashboard() {
-      const params = { date_from: dataInicio, date_to: dataFim }
+      const params = { date_from: format(dataInicio, 'yyyy-MM-dd'), date_to: format(dataFim, 'yyyy-MM-dd') }
       if (examId) params.exam_id = examId
       if (machineId) params.machine_id = machineId
       try {
@@ -61,6 +96,8 @@ function Dashboard() {
         setProblemasPorMes(data.problemas_por_mes)
         setProblemasTipos(data.problemas_tipos)
         setFaturamento(data.faturamento)
+        setTotalExames(data.total_exames)
+        setExamesPorMaquina(data.exames_por_maquina)
       } catch {
         // usuário pode não ter permissão se não for admin
       }
@@ -78,16 +115,22 @@ function Dashboard() {
           <div className="filter-group">
             <span className="filter-label">Período de Análise</span>
             <div className="date-range">
-              <input
-                type="date"
-                value={dataInicio}
-                onChange={(e) => setDataInicio(e.target.value)}
+              <DatePicker
+                selected={dataInicio}
+                onChange={setDataInicio}
+                maxDate={dataFim}
+                dateFormat="dd/MM/yyyy"
+                locale="pt-BR"
+                renderCustomHeader={CalendarioHeader}
               />
               <span>a</span>
-              <input
-                type="date"
-                value={dataFim}
-                onChange={(e) => setDataFim(e.target.value)}
+              <DatePicker
+                selected={dataFim}
+                onChange={setDataFim}
+                minDate={dataInicio}
+                dateFormat="dd/MM/yyyy"
+                locale="pt-BR"
+                renderCustomHeader={CalendarioHeader}
               />
             </div>
           </div>
@@ -151,6 +194,47 @@ function Dashboard() {
               ))}
             </BarChart>
           </ResponsiveContainer>
+        </div>
+
+        <div className="dashboard-row2">
+          <div className="faturamento-card dashboard-row2-card">
+            <p className="faturamento-label">Total de Exames</p>
+            <p className="faturamento-valor">{totalExames.toLocaleString('pt-BR')}</p>
+          </div>
+
+          <div className="chart-card dashboard-row2-card">
+            <p className="chart-title">Comparação de Máquinas</p>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={exemesPorMaquina}
+                  dataKey="total"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={70}
+                  labelLine={false}
+                  label={({ cx, cy, midAngle, innerRadius, outerRadius: outerR, percent }) => {
+                    const RADIAN = Math.PI / 180
+                    const radius = innerRadius + (outerR - innerRadius) * 0.6
+                    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+                    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+                    return (
+                      <text x={x} y={y} fill="#fff" textAnchor="middle" dominantBaseline="central" fontSize={12}>
+                        {`${(percent * 100).toFixed(0)}%`}
+                      </text>
+                    )
+                  }}
+                >
+                  {exemesPorMaquina.map((entry, i) => (
+                    <Cell key={entry.machine_id} fill={CORES_PROBLEMAS[i % CORES_PROBLEMAS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

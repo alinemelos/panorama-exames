@@ -74,9 +74,36 @@ class DashboardView(APIView):
             .aggregate(total=Sum(F('count') * F('duty__machine__cost')))
         )['total'] or 0
 
+        total_exames = (
+            Collection.objects.filter(duty__in=duties_qs)
+            .aggregate(total=Sum('count'))
+        )['total'] or 0
+
+        duties_qs_maquinas = Duty.objects.filter(end_date__isnull=False)
+        if date_from:
+            duties_qs_maquinas = duties_qs_maquinas.filter(start_date__date__gte=date_from)
+        if date_to:
+            duties_qs_maquinas = duties_qs_maquinas.filter(start_date__date__lte=date_to)
+        if exam_id:
+            duties_qs_maquinas = duties_qs_maquinas.filter(machine__exam_type_id=exam_id)
+
+        maquinas_qs = (
+            Collection.objects.filter(duty__in=duties_qs_maquinas)
+            .values('duty__machine_id', 'duty__machine__name')
+            .annotate(total=Sum('count'))
+            .order_by('-total')
+        )
+        exames_por_maquina = [
+            {'machine_id': row['duty__machine_id'], 'name': row['duty__machine__name'], 'total': row['total']}
+            for row in maquinas_qs
+            if row['total']
+        ]
+
         return Response({
             'exames_por_mes': exames_result,
             'problemas_por_mes': list(problems_by_month.values()),
             'problemas_tipos': problemas_tipos,
             'faturamento': float(faturamento),
+            'total_exames': int(total_exames),
+            'exames_por_maquina': exames_por_maquina,
         })
