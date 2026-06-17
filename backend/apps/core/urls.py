@@ -10,7 +10,8 @@ urlpatterns = [
     path('problems/<int:pk>/', views.ProblemDetailView.as_view(), name='problem-detail'),
     path('duties/', views.DutyCreateView.as_view(), name='duty-create'),
     path('duties/current/', views.DutyCurrentView.as_view(), name='duty-current'),
-    path('duties/<int:pk>/collections/', views.DutyAddCollectionView.as_view(), name='duty-add-collection'),
+    path('duties/<int:pk>/', views.DutyDetailView.as_view(), name='duty-detail'),
+    path('duties/<int:pk>/collections/', views.DutyCollectionsView.as_view(), name='duty-collections'),
     path('duties/<int:pk>/close/', views.DutyCloseView.as_view(), name='duty-close'),
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
 ]
