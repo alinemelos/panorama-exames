@@ -5,6 +5,7 @@ from apps.core.models.exam import Exam
 
 
 class Machine(models.Model):
+    name = models.CharField(max_length=255)
     exam_type = models.ForeignKey(Exam, on_delete=models.PROTECT, related_name='machines')
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -18,4 +19,4 @@ class Machine(models.Model):
     )
 
     def __str__(self):
-        return f'{self.exam_type.name} #{self.pk}'
+        return self.name

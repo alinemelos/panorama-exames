@@ -7,5 +7,5 @@ class MachineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Machine
-        fields = ['id', 'exam_type', 'exam_type_name', 'cost', 'created_date', 'last_edited_date']
+        fields = ['id', 'name', 'exam_type', 'exam_type_name', 'cost', 'created_date', 'last_edited_date']
         read_only_fields = ['created_date', 'last_edited_date']
