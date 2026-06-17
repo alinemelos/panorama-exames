@@ -8,7 +8,11 @@ from apps.authentication.serializers import RequestAccessSerializer
 class RequestAccessView(APIView):
     serializer_class = RequestAccessSerializer
 
-    @extend_schema(tags=['Autenticação'])
+    @extend_schema(
+        tags=['Solicitações de Acesso'],
+        summary='Solicitar acesso',
+        description='Cria uma solicitação de acesso (email, name); o usuário criado fica inativo aguardando aprovação de um administrador.',
+    )
     def post(self, request):
         serializer = RequestAccessSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

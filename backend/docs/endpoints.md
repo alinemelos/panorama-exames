@@ -16,6 +16,8 @@ Permissões usadas:
 
 ## Authentication (`/api/v1/auth/`)
 
+Tags no Swagger: **Autenticação** (login/logout), **Solicitações de Acesso**, **Solicitações de Redefinição de Senha**, **Usuários**.
+
 ### Login / Logout
 
 | Método | Path | Permissão | Descrição |
@@ -41,7 +43,7 @@ Fluxo de cadastro: novo usuário pede acesso, fica inativo (`is_active=False`) a
 | POST | `request-reset/` | Pública | Usuário ativo solicita redefinição de senha (`email`); marca `password_reset_requested=True`. |
 | GET | `reset-requests/` | IsAdmin | Lista usuários ativos com redefinição de senha pendente. |
 | POST | `reset-requests/<pk>/approve/` | IsAdmin | Aprova a redefinição, define a nova senha e limpa `password_reset_requested`. |
-| POST | `reset-requests/<pk>/reject/` | IsAdmin | Rejeita a solicitação, apenas limpando `password_reset_requested`. |
+| DELETE | `reset-requests/<pk>/reject/` | IsAdmin | Rejeita a solicitação, apenas limpando `password_reset_requested`. |
 
 ### Usuários
 

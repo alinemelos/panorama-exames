@@ -7,7 +7,11 @@ from apps.authentication.serializers import RequestResetSerializer
 class RequestResetView(APIView):
     serializer_class = RequestResetSerializer
 
-    @extend_schema(tags=['Autenticação'])
+    @extend_schema(
+        tags=['Solicitações de Redefinição de Senha'],
+        summary='Solicitar redefinição de senha',
+        description='Usuário ativo solicita redefinição de senha (email); marca password_reset_requested=True.',
+    )
     def post(self, request):
         serializer = RequestResetSerializer(data=request.data, context={})
         serializer.is_valid(raise_exception=True)

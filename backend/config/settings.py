@@ -149,7 +149,10 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API para gerenciamento de exames e usuários',
     'VERSION': '1.0.0',
     'TAGS': [
-        {'name': 'Autenticação', 'description': 'Login, logout e gerenciamento de acesso e senha'},
+        {'name': 'Autenticação', 'description': 'Login e logout'},
+        {'name': 'Solicitações de Acesso', 'description': 'Pedidos de novo cadastro e aprovação/rejeição por administradores'},
+        {'name': 'Solicitações de Redefinição de Senha', 'description': 'Pedidos de redefinição de senha e aprovação/rejeição por administradores'},
+        {'name': 'Usuários', 'description': 'Consulta de usuários cadastrados'},
         {'name': 'Exames', 'description': 'Cadastro e consulta de tipos de exame'},
         {'name': 'Máquinas', 'description': 'Cadastro e consulta de máquinas'},
         {'name': 'Problemas', 'description': 'Consulta de problemas associados a plantões'},

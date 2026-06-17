@@ -7,7 +7,7 @@ from apps.authentication.serializers import UserListSerializer
 
 @extend_schema_view(
     get=extend_schema(
-        tags=['Autenticação'],
+        tags=['Usuários'],
         summary='Listar usuários',
         description='Retorna todos os usuários cadastrados.',
         responses=UserListSerializer,

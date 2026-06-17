@@ -10,7 +10,11 @@ from apps.authentication.serializers import LoginSerializer
 class LoginView(APIView):
     serializer_class = LoginSerializer
 
-    @extend_schema(tags=['Autenticação'])
+    @extend_schema(
+        tags=['Autenticação'],
+        summary='Login',
+        description='Autentica com email e password; em caso de sucesso, seta cookies HTTP-only com access/refresh JWT.',
+    )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -29,7 +33,13 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    @extend_schema(request=None, responses=OpenApiTypes.OBJECT, tags=['Autenticação'])
+    @extend_schema(
+        request=None,
+        responses=OpenApiTypes.OBJECT,
+        tags=['Autenticação'],
+        summary='Logout',
+        description='Limpa os cookies de JWT, efetivando o logout.',
+    )
     def post(self, request):
         response = Response({'detail': 'Logged out.'})
         response.delete_cookie('access_token')

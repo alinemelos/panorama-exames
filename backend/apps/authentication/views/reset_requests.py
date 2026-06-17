@@ -9,7 +9,7 @@ from apps.authentication.serializers import ResetRequestSerializer, AdminSetPass
 
 @extend_schema_view(
     get=extend_schema(
-        tags=['Autenticação'],
+        tags=['Solicitações de Redefinição de Senha'],
         summary='Listar solicitações de redefinição de senha pendentes',
         description='Retorna os usuários ativos que solicitaram redefinição de senha e aguardam aprovação de um administrador.',
         responses=ResetRequestSerializer,
@@ -25,7 +25,11 @@ class ResetRequestApproveView(APIView):
     serializer_class = AdminSetPasswordSerializer
     permission_classes = [IsAdmin]
 
-    @extend_schema(tags=['Autenticação'])
+    @extend_schema(
+        tags=['Solicitações de Redefinição de Senha'],
+        summary='Aprovar redefinição de senha',
+        description='Aprova a redefinição, define a nova senha e limpa password_reset_requested.',
+    )
     def post(self, request, pk):
         user = generics.get_object_or_404(CustomUser, pk=pk, password_reset_requested=True)
         serializer = AdminSetPasswordSerializer(data=request.data)
@@ -39,8 +43,13 @@ class ResetRequestApproveView(APIView):
 class ResetRequestRejectView(APIView):
     permission_classes = [IsAdmin]
 
-    @extend_schema(request=None, tags=['Autenticação'])
-    def post(self, request, pk):
+    @extend_schema(
+        request=None,
+        tags=['Solicitações de Redefinição de Senha'],
+        summary='Rejeitar redefinição de senha',
+        description='Rejeita a solicitação, apenas limpando password_reset_requested.',
+    )
+    def delete(self, request, pk):
         user = generics.get_object_or_404(CustomUser, pk=pk, password_reset_requested=True)
         user.password_reset_requested = False
         user.save()
