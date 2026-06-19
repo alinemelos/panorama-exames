@@ -16,11 +16,7 @@ function Login() {
     try {
       const { data } = await login(email, senha)
       localStorage.setItem('user', JSON.stringify({ role: data.role, name: data.name }))
-      if (data.role === 'nursing') {
-        navigate('/plantao')
-      } else {
-        navigate('/dashboard')
-      }
+      navigate('/dashboard')
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.non_field_errors?.[0]
       setErro(msg || 'Erro ao fazer login.')

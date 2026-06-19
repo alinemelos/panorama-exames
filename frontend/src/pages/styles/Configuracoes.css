@@ -1,0 +1,184 @@
+.configuracoes-page {
+  min-height: 100%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.configuracoes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.configuracoes-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.btn-fechar {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.configuracoes-card {
+  border: 1.5px solid var(--color-primary);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.configuracoes-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 6px;
+  display: inline-block;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 4px;
+}
+
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.usuarios-table th {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-primary);
+  text-align: left;
+  padding: 8px 4px;
+  border-bottom: 1.5px solid var(--color-primary);
+}
+
+.usuarios-table th:last-child {
+  width: 72px;
+}
+
+.usuarios-table td {
+  font-size: 14px;
+  color: var(--color-text-dark);
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.usuarios-acoes {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  width: 72px;
+  white-space: nowrap;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.icon-btn:hover {
+  opacity: 0.7;
+}
+
+.icon-adicionar {
+  font-size: 24px;
+  margin-top: 12px;
+}
+
+.texto-vazio {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 12px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.modal-box .field-group label {
+  font-size: 16px;
+}
+
+.modal-box .field-group input::placeholder {
+  font-size: 13px;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.modal-actions .btn-enviar {
+  margin-top: 0;
+}
+
+.btn-cancelar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 43px;
+  background: none;
+  border: 1.5px solid var(--color-border-muted);
+  color: var(--color-text-muted);
+  border-radius: 6px;
+  padding: 0 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background: var(--color-primary-bg-light);
+}

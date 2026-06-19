@@ -3,17 +3,17 @@ from django.db.models.functions import TruncMonth
 from django.utils.text import slugify
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.core.models import Collection, Duty
-from apps.core.views.permissions import IsAdmin
 
 MES_ABBR = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 
 class DashboardView(APIView):
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(responses=OpenApiTypes.OBJECT, tags=['Dashboard'])
     def get(self, request):
@@ -71,7 +71,7 @@ class DashboardView(APIView):
 
         faturamento = (
             Collection.objects.filter(duty__in=duties_qs)
-            .aggregate(total=Sum(F('count') * F('duty__machine__cost')))
+            .aggregate(total=Sum(F('count') * F('cost')))
         )['total'] or 0
 
         total_exames = (

@@ -102,7 +102,7 @@ class DutyCollectionsView(APIView):
 
         serializer = CollectionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        collection = serializer.save(duty=duty)
+        collection = serializer.save(duty=duty, cost=duty.machine.cost)
         return Response(CollectionSerializer(collection).data, status=status.HTTP_201_CREATED)
 
 

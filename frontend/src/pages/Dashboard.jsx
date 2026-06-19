@@ -47,6 +47,8 @@ function CalendarioHeader({ date, decreaseMonth, increaseMonth, changeMonth, cha
 
 function Dashboard() {
   const navigate = useNavigate()
+  const usuario = JSON.parse(localStorage.getItem('user') || '{}')
+  const isAdmin = usuario.role === 'administrator'
   const [dataInicio, setDataInicio] = useState(new Date(2026, 0, 1))
   const [dataFim, setDataFim] = useState(new Date())
   const [examId, setExamId] = useState('')
@@ -151,7 +153,9 @@ function Dashboard() {
             </select>
           </div>
 
-          <button className="btn-settings" title="Configurações">&#9881;</button>
+          {isAdmin && (
+            <button className="btn-settings" title="Configurações" onClick={() => navigate('/configuracoes')}>&#9881;</button>
+          )}
         </div>
       </header>
 

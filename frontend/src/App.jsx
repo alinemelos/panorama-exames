@@ -5,6 +5,7 @@ import DefinirSenha from './pages/DefinirSenha'
 import RedefinirSenha from './pages/RedefinirSenha'
 import Plantao from './pages/Plantao'
 import Dashboard from './pages/Dashboard'
+import Configuracoes from './pages/Configuracoes'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/redefinir-senha" element={<RedefinirSenha />} />
         <Route path="/plantao" element={<Plantao />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/configuracoes" element={<Configuracoes />} />
       </Routes>
     </BrowserRouter>
   )
