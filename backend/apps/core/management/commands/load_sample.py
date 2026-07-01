@@ -2,6 +2,7 @@ import random
 from datetime import timedelta
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -15,6 +16,8 @@ class Command(BaseCommand):
         self.stdout.write('Limpando dados de exemplo anteriores...')
         Duty.objects.all().delete()
         Machine.objects.all().delete()
+
+        self._create_admin_user()
 
         tomografia, _ = Exam.objects.get_or_create(name='Tomografia')
         raio_x, _ = Exam.objects.get_or_create(name='Raio X')
@@ -31,6 +34,11 @@ class Command(BaseCommand):
             self._create_open_duty(machine, today)
 
         self.stdout.write(self.style.SUCCESS('Dados de exemplo criados com sucesso.'))
+
+    def _create_admin_user(self):
+        User = get_user_model()
+        if not User.objects.filter(email='admin@example.com').exists():
+            User.objects.create_superuser(email='admin@example.com', name='Admin', password='admin')
 
     def _create_machines(self, tomografia, raio_x):
         specs = [
@@ -66,7 +74,11 @@ class Command(BaseCommand):
                 duration_minutes = max(int((end - start).total_seconds() // 60), 1)
                 for _ in range(random.randint(1, 5)):
                     collection_date = start + timedelta(minutes=random.randint(0, duration_minutes))
-                    collection = Collection.objects.create(duty=duty, count=random.randint(1, 30))
+                    collection = Collection.objects.create(
+                        duty=duty,
+                        count=random.randint(1, 30),
+                        cost=Decimal(str(round(random.uniform(50, 500), 2))),
+                    )
                     Collection.objects.filter(pk=collection.pk).update(collection_date=collection_date)
 
     def _create_open_duty(self, machine, today):
